@@ -9,16 +9,19 @@
     <!-- ############ LAYOUT START-->
     <div class="center-block w-xxl w-auto-xs p-y-md">
         <div class="navbar">
-            <div class="pull-center">
+            <div class="pull-center" style="padding-top:5%">
                 <div>
-                    <a class="navbar-brand"><img src="{{ URL::to('backEnd/assets/images/logo.png') }}" alt="."> <span
-                                class="hidden-folded inline">{{ trans('backLang.control') }}</span></a>
+                    <!-- <a class="navbar-brand"><img src="{{ URL::to('backEnd/assets/images/logo.png') }}" alt="."> <span
+                                class="hidden-folded inline">{{ trans('backLang.control') }}</span></a> -->
+                                <a class="navbar-brand"><img style="max-height:40px!important" src="{{ URL::to('backEnd/assets/images/logo2.png') }}" alt="."></a>
                 </div>
             </div>
         </div>
-        <div class="p-a-md box-color r box-shadow-z1 text-color m-a">
+        <div class="p-a-md box-color r box-shadow-z1 text-color m-a" style="border-radius:0.8em">
             <div class="m-b text-sm">
-                {{ trans('backLang.signedInToControl') }}
+                <!-- {{ trans('backLang.signedInToControl') }} -->
+                <a class=""><img src="{{ URL::to('backEnd/assets/images/logo.png') }}" alt="."> <span
+                                class="">Welcome to Log in</span></a>
             </div>
             <form name="form" method="POST" action="{{ url('/login') }}">
                 {{ csrf_field() }}

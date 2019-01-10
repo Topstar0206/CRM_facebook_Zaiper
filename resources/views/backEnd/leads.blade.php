@@ -1,34 +1,32 @@
 @extends('backEnd.layout')
 
 @section('content')
-    @if(@Auth::user()->permissionsGroup->webmaster_status)
-        @include('backEnd.users.permissions.view')
-    @endif
+    
 
     <div class="padding">
         <div class="box">
 
             <div class="box-header dker">
-                <h3>Doctors</h3>
+                <h3>Leads</h3>
                 <small>
                     <a href="{{ route('adminHome') }}">{{ trans('backLang.home') }}</a> /
                     <a href="">{{ trans('backLang.settings') }}</a>
                 </small>
             </div>
 
-            @if($Users->total() >0)
+            @if($Leads->total() >0)
                 @if(@Auth::user()->permissionsGroup->webmaster_status)
                     <div class="row p-a pull-right" style="margin-top: -70px;">
                         <div class="col-sm-12">
-                            <a class="btn btn-fw primary" href="{{route("usersCreate")}}">
-                                <i class="material-icons">&#xe7fe;</i>
-                                &nbsp; {{ trans('backLang.newUser') }}
+                            <a class="btn btn-fw primary" href="{{route("leadsCreate")}}">
+                                <i class="fa fa-plus" style="font-size:70%"></i> <i class="fa fa-users"></i>
+                                &nbsp; New Lead
                             </a>
                         </div>
                     </div>
                 @endif
             @endif
-            @if($Users->total() == 0)
+            @if($Leads->total() == 0)
                 <div class="row p-a">
                     <div class="col-sm-12">
                         <div class=" p-a text-center ">
@@ -36,9 +34,9 @@
                             <br>
                             @if(@Auth::user()->permissionsGroup->webmaster_status)
                                 <br>
-                                <a class="btn btn-fw primary" href="{{route("usersCreate")}}">
-                                    <i class="material-icons">&#xe7fe;</i>
-                                    &nbsp; {{ trans('backLang.newUser') }}
+                                <a class="btn btn-fw primary" href="{{route("leadsCreate")}}">
+                                    <i class="fa fa-users"></i> 
+                                    &nbsp; New Lead
                                 </a>
                             @endif
                         </div>
@@ -46,8 +44,8 @@
                 </div>
             @endif
 
-            @if($Users->total() > 0)
-                {{Form::open(['route'=>'usersUpdateAll','method'=>'post'])}}
+            @if($Leads->total() > 0)
+                {{Form::open(['route'=>'leadsUpdateAll','method'=>'post'])}}
                 <div class="table-responsive">
                     <table class="table table-striped  b-t">
                         <thead>
@@ -57,45 +55,63 @@
                                     <input id="checkAll" type="checkbox"><i></i>
                                 </label>
                             </th>
-                            <th>{{ trans('backLang.fullName') }}</th>
-                            <th>{{ trans('backLang.loginEmail') }}</th>
-                            <th>{{ trans('backLang.Permission') }}</th>
-                            <th class="text-center" style="width:50px;">{{ trans('backLang.status') }}</th>
+                            <th>Lead Image</th>
+                            <th>Full Name</th>
+                            <th>Email</th>
+                            <th>Phone Number</th>
+                            <th>Doctor Name</th>
+                           
                             <th class="text-center" style="width:200px;">{{ trans('backLang.options') }}</th>
                         </tr>
                         </thead>
                         <tbody>
 
-                        @foreach($Users as $User)
+                        @foreach($Leads as $Lead)
                             <tr>
                                 <td><label class="ui-check m-a-0">
-                                        <input type="checkbox" name="ids[]" value="{{ $User->id }}"><i
+                                        <input type="checkbox" name="ids[]" value="{{ $Lead->id }}"><i
                                                 class="dark-white"></i>
-                                        {!! Form::hidden('row_ids[]',$User->id, array('class' => 'form-control row_no')) !!}
+                                        {!! Form::hidden('row_ids[]',$Lead->id, array('class' => 'form-control row_no')) !!}
                                     </label>
                                 </td>
+                                <td><img src="/uploads/leads/{!! $Lead->image  !!}" alt="" width="50px" height="40px" style="border-radius:1em"></td>
                                 <td>
-                                    {!! $User->name   !!}
+                                 
+                                        {!! $Lead->name   !!}
+                               
                                 </td>
 
                                 <td>
-                                    <small>{!! $User->email   !!}</small>
+                                    <small>{!! $Lead->email   !!}</small>
                                 </td>
                                 <td>
-                                    <small>{{$User->permissionsGroup->name}}</small>
+                                    <small>{!! $Lead->phone  !!}</small>
                                 </td>
-                                <td class="text-center">
-                                    <i class="fa {{ ($User->status==1) ? "fa-check text-success":"fa-times text-danger" }} inline"></i>
+                                <td>
+                                    <small>
+                                        
+                                         <?php 
+                                            $user = DB::table('users')->where('id', $Lead->user_id)->get();
+        
+                                         
+                                         echo  $user[0]->name;
+                                        ?>
+                                    </small>
                                 </td>
+                                
+                      
+                          
+                               
+    
                                 <td class="text-center">
                                     <a class="btn btn-sm success"
-                                       href="{{ route("usersEdit",["id"=>$User->id]) }}">
+                                       href="{{ route("leadsEdit",["id"=>$Lead->id]) }}">
                                         <small><i class="material-icons">&#xe3c9;</i> {{ trans('backLang.edit') }}
                                         </small>
                                     </a>
                                     @if(@Auth::user()->permissionsGroup->webmaster_status)
                                         <button class="btn btn-sm warning" data-toggle="modal"
-                                                data-target="#m-{{ $User->id }}" ui-toggle-class="bounce"
+                                                data-target="#m-{{ $Lead->id }}" ui-toggle-class="bounce"
                                                 ui-target="#animate">
                                             <small><i class="material-icons">&#xe872;</i> {{ trans('backLang.delete') }}
                                             </small>
@@ -106,7 +122,7 @@
                                 </td>
                             </tr>
                             <!-- .modal -->
-                            <div id="m-{{ $User->id }}" class="modal fade" data-backdrop="true">
+                            <div id="m-{{ $Lead->id }}" class="modal fade" data-backdrop="true">
                                 <div class="modal-dialog" id="animate">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -116,13 +132,13 @@
                                             <p>
                                                 {{ trans('backLang.confirmationDeleteMsg') }}
                                                 <br>
-                                                <strong>[ {{ $User->name }} ]</strong>
+                                                <strong>[ {{ $Lead->name }} ]</strong>
                                             </p>
                                         </div>
                                         <div class="modal-footer">
                                             <button type="button" class="btn dark-white p-x-md"
                                                     data-dismiss="modal">{{ trans('backLang.no') }}</button>
-                                            <a href="{{ route("usersDestroy",["id"=>$User->id]) }}"
+                                            <a href="{{ route("leadsDestroy",["id"=>$Lead->id]) }}"
                                                class="btn danger p-x-md">{{ trans('backLang.yes') }}</a>
                                         </div>
                                     </div><!-- /.modal-content -->
@@ -164,8 +180,6 @@
                                 <select name="action" id="action" class="input-sm form-control w-sm inline v-middle"
                                         required>
                                     <option value="">{{ trans('backLang.bulkAction') }}</option>
-                                    <option value="activate">{{ trans('backLang.activeSelected') }}</option>
-                                    <option value="block">{{ trans('backLang.blockSelected') }}</option>
                                     <option value="delete">{{ trans('backLang.deleteSelected') }}</option>
                                 </select>
                                 <button type="submit" id="submit_all"
@@ -179,12 +193,12 @@
                         </div>
 
                         <div class="col-sm-3 text-center">
-                            <small class="text-muted inline m-t-sm m-b-sm">{{ trans('backLang.showing') }} {{ $Users->firstItem() }}
-                                -{{ $Users->lastItem() }} {{ trans('backLang.of') }}
-                                <strong>{{ $Users->total()  }}</strong> {{ trans('backLang.records') }}</small>
+                            <small class="text-muted inline m-t-sm m-b-sm">{{ trans('backLang.showing') }} {{ $Leads->firstItem() }}
+                                -{{ $Leads->lastItem() }} {{ trans('backLang.of') }}
+                                <strong>{{ $Leads->total()  }}</strong> {{ trans('backLang.records') }}</small>
                         </div>
                         <div class="col-sm-6 text-right text-center-xs">
-                            {!! $Users->links() !!}
+                            {!! $Leads->links() !!}
                         </div>
                     </div>
                 </footer>
@@ -207,6 +221,7 @@
             @endif
         </div>
     </div>
+ 
 @endsection
 @section('footerInclude')
     <script type="text/javascript">

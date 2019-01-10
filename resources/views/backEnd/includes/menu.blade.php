@@ -13,7 +13,7 @@ $urlAfterRoot = substr($fullPagePath, strpos($fullPagePath, env('BACKEND_PATH'))
             <!-- brand -->
             <a class="navbar-brand" href="{{ route('adminHome') }}">
                 <img src="{{ URL::to('backEnd/assets/images/logo.png') }}" alt="Control">
-                <span class="hidden-folded inline">{{ trans('backLang.control') }}</span>
+                <span class="hidden-folded inline">Patient Drive</span>
             </a>
             <!-- / brand -->
         </div>
@@ -33,6 +33,16 @@ $urlAfterRoot = substr($fullPagePath, strpos($fullPagePath, env('BACKEND_PATH'))
                             <span class="nav-text">{{ trans('backLang.dashboard') }}</span>
                         </a>
                     </li>
+                    @if(@Auth::user()->permissionsGroup->analytics_status)
+                        <li class=""><a style="font-size:14px" href="{{ route('users') }}"><span class="nav-icon"><i class="material-icons fa fa-user"></i></span><span style="padding-top:7%" class="nav-text"> Doctors</span></a></li>
+                        <li class=""><a   href="{{ route('leads') }}"><span class="nav-icon">
+                            <i class="material-icons">&#xe7ef;</i></span><span class="nav-text"> Leads</span></a></li>
+                    @endif
+                    @if(!@Auth::user()->permissionsGroup->analytics_status)
+                    <li class=""><a style="font-size:16px" href="{{ route('users') }}"><span class="nav-icon"><i class="material-icons fa fa-user icc"></i></span><span style="padding-top:%" class="nav-text"> My Profile</span></a></li>
+                    <li class=""><a style="font-size:16px" id="main_detail" href="{{ route('leads') }}"><span class="nav-icon">
+                        <i class="material-icons">&#xe7ef;</i></span><span class="nav-text">My Leads</span></a></li>
+                    @endif
 
 
                     @if(Helper::GeneralWebmasterSettings("analytics_status"))

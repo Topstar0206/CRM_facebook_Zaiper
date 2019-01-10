@@ -1,5 +1,6 @@
 <meta charset="utf-8"/>
-<title>{{ trans('backLang.control') }} | {{ Helper::GeneralSiteSettings("site_title_" . trans('backLang.boxCode')) }}</title>
+<!-- <title>{{ trans('backLang.control') }} | {{ Helper::GeneralSiteSettings("site_title_" . trans('backLang.boxCode')) }}</title> -->
+<title>PATIENT | DRIVE</title>
 <meta name="description" content="Admin, Dashboard, Bootstrap, Bootstrap 4, Angular, AngularJS"/>
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimal-ui"/>
 <meta http-equiv="X-UA-Compatible" content="IE=edge">

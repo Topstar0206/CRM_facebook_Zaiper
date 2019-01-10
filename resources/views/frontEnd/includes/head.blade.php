@@ -1,5 +1,6 @@
 <meta charset="utf-8">
-<title>{{$PageTitle}} {{($PageTitle !="")? "|":""}} {{ Helper::GeneralSiteSettings("site_title_" . trans('backLang.boxCode')) }}</title>
+<!-- <title>{{$PageTitle}} {{($PageTitle !="")? "|":""}} {{ Helper::GeneralSiteSettings("site_title_" . trans('backLang.boxCode')) }}</title> -->
+<title>PATIENT | DRIVE</title>
 <meta name="description" content="{{$PageDescription}}"/>
 <meta name="keywords" content="{{$PageKeywords}}"/>
 <meta name="author" content="{{ URL::to('') }}"/>

@@ -107,6 +107,16 @@ Route::Group(['prefix' => env('BACKEND_PATH')], function () {
     Route::get('/banners/destroy/{id}', 'BannersController@destroy')->name('BannersDestroy');
     Route::post('/banners/updateAll', 'BannersController@updateAll')->name('BannersUpdateAll');
 
+    //Leads 
+    Route::get('/leads/create/', 'LeadsController@create')->name('leadsCreate');
+    Route::post('/leads/store', 'LeadsController@store')->name('leadsStore');
+    Route::get('/leads/{id}/edit', 'LeadsController@edit')->name('leadsEdit');
+    Route::post('/leads/{id}/update', 'LeadsController@update')->name('leadsUpdate');
+    Route::get('/leads/destroy/{id}', 'LeadsController@destroy')->name('leadsDestroy');
+    Route::post('/leads/updateAll', 'LeadsController@updateAll')->name('leadsUpdateAll');
+    Route::get('/leadscategory','LeadsController@catogoryshow')->name('leadsCategory');
+    Route::get('/leads','LeadsController@index')->name('leads');
+
     // Sections
     Route::get('/{webmasterId}/sections', 'SectionsController@index')->name('sections');
     Route::get('/{webmasterId}/sections/create', 'SectionsController@create')->name('sectionsCreate');
@@ -311,9 +321,13 @@ Route::Group(['prefix' => '/api/v1'], function () {
 Route::get('/sitemap.xml', 'SiteMapController@siteMap')->name('siteMap');
 Route::get('/{lang}/sitemap', 'SiteMapController@siteMap')->name('siteMapByLang');
 
-Route::get('/', 'FrontendHomeController@HomePage')->name('Home');
+// Route::get('/', 'FrontendHomeController@HomePage')->name('Home');
+Route::get('/', 'HomeController@index')->name('Home');
 // ../home url
-Route::get('/home', 'FrontendHomeController@HomePage')->name('HomePage');
+// Route::get('/home', 'FrontendHomeController@HomePage')->name('HomePage');
+Route::get('/home', function(){
+    return redirect()->route('adminHome');
+});
 Route::get('/{lang?}/home', 'FrontendHomeController@HomePageByLang')->name('HomePageByLang');
 // ../subscribe to newsletter submit  (ajax url)
 Route::post('/subscribe', 'FrontendHomeController@subscribeSubmit')->name('subscribeSubmit');
