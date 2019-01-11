@@ -65,7 +65,7 @@ $urlAfterRoot = substr($fullPagePath, strpos($fullPagePath, env('BACKEND_PATH'))
                                     <span class="nav-icon">
                     <i class="material-icons">&#xe1b8;</i>
                   </span>
-                                    <span class="nav-text">{{ trans('backLang.visitorsAnalytics') }}</span>
+                            <span class="nav-text">{{ trans('backLang.visitorsAnalytics') }}</span>
                                 </a>
                                 <ul class="nav-sub">
                                     <li>
@@ -162,7 +162,7 @@ $urlAfterRoot = substr($fullPagePath, strpos($fullPagePath, env('BACKEND_PATH'))
 
 
                                 </ul>
-                            </li>
+                    </li>
                         @endif
                     @endif
                     @if(Helper::GeneralWebmasterSettings("newsletter_status"))
@@ -173,9 +173,9 @@ $urlAfterRoot = substr($fullPagePath, strpos($fullPagePath, env('BACKEND_PATH'))
                             ?>
                             <li {{ ($PathCurrentFolder==$currentFolder) ? 'class=active' : '' }}>
                                 <a href="{{ route('contacts') }}">
-<span class="nav-icon">
-<i class="material-icons">&#xe7ef;</i>
-</span>
+                    <span class="nav-icon">
+                    <i class="material-icons">&#xe7ef;</i>
+                    </span>
                                     <span class="nav-text">{{ trans('backLang.newsletter') }}</span>
                                 </a>
                             </li>
@@ -220,119 +220,9 @@ $urlAfterRoot = substr($fullPagePath, strpos($fullPagePath, env('BACKEND_PATH'))
                             </li>
                         @endif
                     @endif
-                    <li class="nav-header hidden-folded">
-                        <small class="text-muted">{{ trans('backLang.siteData') }}</small>
-                    </li>
+ 
 
-                    <?php
-                    $data_sections_arr = explode(",", Auth::user()->permissionsGroup->data_sections);
-                    ?>
-                    @foreach($GeneralWebmasterSections as $GeneralWebmasterSection)
-                        @if(in_array($GeneralWebmasterSection->id,$data_sections_arr))
-                            <?php
-                            $LiIcon = "&#xe2c8;";
-                            if ($GeneralWebmasterSection->type == 3) {
-                                $LiIcon = "&#xe050;";
-                            }
-                            if ($GeneralWebmasterSection->type == 2) {
-                                $LiIcon = "&#xe63a;";
-                            }
-                            if ($GeneralWebmasterSection->type == 1) {
-                                $LiIcon = "&#xe251;";
-                            }
-                            if ($GeneralWebmasterSection->type == 0) {
-                                $LiIcon = "&#xe2c8;";
-                            }
-                            if ($GeneralWebmasterSection->name == "sitePages") {
-                                $LiIcon = "&#xe3e8;";
-                            }
-                            if ($GeneralWebmasterSection->name == "articles") {
-                                $LiIcon = "&#xe02f;";
-                            }
-                            if ($GeneralWebmasterSection->name == "services") {
-                                $LiIcon = "&#xe540;";
-                            }
-                            if ($GeneralWebmasterSection->name == "news") {
-                                $LiIcon = "&#xe307;";
-                            }
-                            if ($GeneralWebmasterSection->name == "products") {
-                                $LiIcon = "&#xe8f6;";
-                            }
-
-                            // get 9 char after root url to check if is "webmaster"
-                            $is_webmaster = substr($urlAfterRoot, 0, 9);
-                            ?>
-                            @if($GeneralWebmasterSection->sections_status > 0)
-                                <li {{ ($GeneralWebmasterSection->id == @$WebmasterSection->id && $is_webmaster != "webmaster") ? 'class=active' : '' }}>
-                                    <a>
-                  <span class="nav-caret">
-                    <i class="fa fa-caret-down"></i>
-                  </span>
-                                        <span class="nav-icon">
-                    <i class="material-icons">{!! $LiIcon !!}</i>
-                  </span>
-                                        <span class="nav-text">{!! str_replace("backLang.","",trans('backLang.'.$GeneralWebmasterSection->name)) !!}</span>
-                                    </a>
-                                    <ul class="nav-sub">
-                                        @if($GeneralWebmasterSection->sections_status > 0)
-
-                                            <?php
-                                            $currentFolder = "sections"; // Put folder name here
-                                            $PathCurrentFolder = substr($urlAfterRoot,
-                                                (strlen($GeneralWebmasterSection->id) + 1), strlen($currentFolder));
-                                            ?>
-                                            <li {{ ($PathCurrentFolder==$currentFolder) ? 'class=active' : '' }} >
-                                                <a href="{{ route('sections',$GeneralWebmasterSection->id) }}">
-                                                    <span class="nav-text">{{ trans('backLang.sectionsOf') }} {{ str_replace("backLang.","",trans('backLang.'.$GeneralWebmasterSection->name)) }}</span>
-                                                </a>
-                                            </li>
-                                        @endif
-
-                                        <?php
-                                        $currentFolder = "topics"; // Put folder name here
-                                        $PathCurrentFolder = substr($urlAfterRoot,
-                                            (strlen($GeneralWebmasterSection->id) + 1), strlen($currentFolder));
-                                        ?>
-                                        <li {{ ($PathCurrentFolder==$currentFolder) ? 'class=active' : '' }} >
-                                            <a href="{{ route('topics',$GeneralWebmasterSection->id) }}">
-                                                <span class="nav-text">{!! str_replace("backLang.","",trans('backLang.'.$GeneralWebmasterSection->name)) !!}</span>
-                                            </a>
-                                        </li>
-
-                                    </ul>
-                                </li>
-
-                            @else
-                                <li {{ ($GeneralWebmasterSection->id== @$WebmasterSection->id) ? 'class=active' : '' }}>
-                                    <a href="{{ route('topics',$GeneralWebmasterSection->id) }}">
-                  <span class="nav-icon">
-                    <i class="material-icons">{!! $LiIcon !!}</i>
-                  </span>
-                                        <span class="nav-text">{!! str_replace("backLang.","",trans('backLang.'.$GeneralWebmasterSection->name)) !!}</span>
-                                    </a>
-                                </li>
-                            @endif
-                        @endif
-                    @endforeach
-
-
-
-                    @if(Helper::GeneralWebmasterSettings("banners_status"))
-                        @if(@Auth::user()->permissionsGroup->banners_status)
-                            <?php
-                            $currentFolder = "banners"; // Put folder name here
-                            $PathCurrentFolder = substr($urlAfterRoot, 0, strlen($currentFolder));
-                            ?>
-                            <li {{ ($PathCurrentFolder==$currentFolder) ? 'class=active' : '' }} >
-                                <a href="{{ route('Banners') }}">
-<span class="nav-icon">
-<i class="material-icons">&#xe433;</i>
-</span>
-                                    <span class="nav-text">{{ trans('backLang.adsBanners') }}</span>
-                                </a>
-                            </li>
-                        @endif
-                    @endif
+ 
 
                     @if(Helper::GeneralWebmasterSettings("settings_status"))
                         @if(@Auth::user()->permissionsGroup->settings_status)

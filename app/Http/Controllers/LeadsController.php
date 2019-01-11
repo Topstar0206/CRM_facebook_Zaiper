@@ -67,7 +67,7 @@ class LeadsController extends Controller
         // General END
         $Users = User::orderby('id', 'asc')->get();
 
-        return view("backEnd.cars.create", compact("GeneralWebmasterSections", "Users"));
+        return view("backEnd.leads.create", compact("GeneralWebmasterSections", "Users"));
     }
 
     /**
@@ -80,44 +80,27 @@ class LeadsController extends Controller
     {
         //
         $this->validate($request, [
-            'image' => 'mimes:png,jpeg,jpg,gif|max:3000',
-            'vin' => 'required',
-            // 'status' => 'required|email|unique:users',
-            'terminal' => 'required',
-            'user_id' => 'required',
-            'vin' =>'required',
-            'description'=>'required',
-            'status' =>'required'
+             'name' => 'required',
+            'email' => 'required',
+            'phone' =>'required',
+
+            
 
         ]);
 
 
         // Start of Upload Files
-        $formFileName = "image";
-        $fileFinalName_ar = "";
-        if ($request->$formFileName != "") {
-            $fileFinalName_ar = time() . rand(1111,
-                    9999) . '.' . $request->file($formFileName)->getClientOriginalExtension();
-            $path = base_path() . "/public/" . $this->getUploadPath();
-            $request->file($formFileName)->move($path, $fileFinalName_ar);
-        }
+  
         // End of Upload Files
        
-        $Car = new car;
-        $Car->vin = $request->vin;
-        $Car->description = $request->description;
-        $Car->destination = $request->destination;
-        $Car->user_id = $request->user_id;
-        $Car->title = $request->title;
-        $Car->key = $request->key;
-        $Car->price = $request->price;
-        $Car->status = $request->status;
-        $Car->terminal = $request->terminal;
-        $Car->image = $fileFinalName_ar;
-        $Car->delivery_data = $request->delivery_data;
-         $Car->save();
+        $Lead = new lead;
+        $Lead->name = $request->name;
+        $Lead->email = $request->email;
+        $Lead->phone = $request->phone;
+        $Lead->user_id = $request->user_id;
+           $Lead->save();
 
-        return redirect()->action('CarsController@index')->with('doneMessage', trans('backLang.addDone'));
+        return redirect()->action('LeadsController@index')->with('doneMessage', trans('backLang.addDone'));
     }
 
     public function getUploadPath()

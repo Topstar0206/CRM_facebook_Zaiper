@@ -1,9 +1,7 @@
 @extends('backEnd.layout')
 
 @section('content')
-    @if(@Auth::user()->permissionsGroup->webmaster_status)
-        @include('backEnd.users.permissions.view')
-    @endif
+   
 
     <div class="padding">
         <div class="box">
@@ -22,7 +20,7 @@
                         <div class="col-sm-12">
                             <a class="btn btn-fw primary" href="{{route("usersCreate")}}">
                                 <i class="material-icons">&#xe7fe;</i>
-                                &nbsp; {{ trans('backLang.newUser') }}
+                                &nbsp; New Doctor
                             </a>
                         </div>
                     </div>
@@ -38,7 +36,7 @@
                                 <br>
                                 <a class="btn btn-fw primary" href="{{route("usersCreate")}}">
                                     <i class="material-icons">&#xe7fe;</i>
-                                    &nbsp; {{ trans('backLang.newUser') }}
+                                    &nbsp; New Doctor
                                 </a>
                             @endif
                         </div>
@@ -57,6 +55,7 @@
                                     <input id="checkAll" type="checkbox"><i></i>
                                 </label>
                             </th>
+                            <th>Photo</th>
                             <th>{{ trans('backLang.fullName') }}</th>
                             <th>{{ trans('backLang.loginEmail') }}</th>
                             <th>{{ trans('backLang.Permission') }}</th>
@@ -74,6 +73,8 @@
                                         {!! Form::hidden('row_ids[]',$User->id, array('class' => 'form-control row_no')) !!}
                                     </label>
                                 </td>
+                                <td>
+                                    <img src="/uploads/users/{!! $User->photo  !!}" alt="" width="50px" height="40px" style="border-radius:1em"></td>         
                                 <td>
                                     {!! $User->name   !!}
                                 </td>
@@ -207,6 +208,9 @@
             @endif
         </div>
     </div>
+    @if(@Auth::user()->permissionsGroup->webmaster_status)
+        @include('backEnd.users.permissions.view')
+    @endif
 @endsection
 @section('footerInclude')
     <script type="text/javascript">
