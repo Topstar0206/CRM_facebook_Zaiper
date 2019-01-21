@@ -11,6 +11,9 @@ use App\Section;
 use App\Topic;
 use App\Webmail;
 use App\WebmasterSection;
+use App\Lead;
+use App\User;
+use App\Permissions;
 use Auth;
 use Illuminate\Http\Request;
 
@@ -49,8 +52,16 @@ class HomeController extends Controller
 
             //List of all contacts
             $Contacts = Contact::where('created_by', '=', Auth::user()->id)->orderby('id', 'desc')->limit(5)->get();
+            $Leads = Lead::where('user_id', '=', Auth::user()->id)->orderby('c_date', 'desc')->limit(5)->get();
+            $TotalLeads = Lead::where('user_id', '=', Auth::user()->id)->count();
+            $Permissions = Permissions::where('created_by', '=', Auth::user()->id)->orderby('id', 'asc')->get();
+ 
         } else {
             //List of all Webmails
+            $Leads = Lead::orderby('c_date', 'desc')->limit(5)->get();
+            $TotalLeads = Lead::count();
+            $Users = User::where ('created_by','=', Auth::user()->id)->where('permissions_id', 3)->orderby('id', 'desc')->limit(5)->get();
+            $TotalUsers = User::where('permissions_id', 3)->count();
             $Webmails = Webmail::orderby('id', 'desc')
                 ->where('cat_id', '=', 0)->limit(4)->get();
 
@@ -58,7 +69,7 @@ class HomeController extends Controller
             $Events = Event::where('start_date', '>=',
                 date('Y-m-d 00:00:00'))->orderby('start_date', 'asc')->limit(5)->get();
 
-
+            $Permissions = Permissions::orderby('id', 'asc')->get();
             //List of all contacts
             $Contacts = Contact::orderby('id', 'desc')->limit(5)->get();
         }
@@ -225,8 +236,8 @@ class HomeController extends Controller
         }
 
         return view('backEnd.home',
-            compact("GeneralWebmasterSections", "Webmails", "Events", "Contacts", "TodayVisitors", "TodayPages",
-                "Last7DaysVisitors", "TodayByCountry", "TodayByBrowser1", "TodayByBrowser1_val", "TodayByBrowser2",
+            compact("GeneralWebmasterSections","Permissions", "Webmails", "Events", "Contacts", "TodayVisitors", "TodayPages",
+                "Last7DaysVisitors", "TodayByCountry","TotalUsers","TotalLeads","Users","Leads", "TodayByBrowser1", "TodayByBrowser1_val", "TodayByBrowser2",
                 "TodayByBrowser2_val", "TodayVisitorsRate"));
     }
 

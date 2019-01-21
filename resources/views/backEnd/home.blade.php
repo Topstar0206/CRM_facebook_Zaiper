@@ -16,79 +16,110 @@
                     $clr_ary = array("info", "danger", "success", "accent",);
                     $ik = 0;
                     ?>
-                    @foreach($GeneralWebmasterSections as $headerWebmasterSection)
-                        @if(in_array($headerWebmasterSection->id,$data_sections_arr))
-                            @if($ik<4)
-                                <?php
-                                $LiIcon = "&#xe2c8;";
-                                if ($headerWebmasterSection->type == 3) {
-                                    $LiIcon = "&#xe050;";
-                                }
-                                if ($headerWebmasterSection->type == 2) {
-                                    $LiIcon = "&#xe63a;";
-                                }
-                                if ($headerWebmasterSection->type == 1) {
-                                    $LiIcon = "&#xe251;";
-                                }
-                                if ($headerWebmasterSection->type == 0) {
-                                    $LiIcon = "&#xe2c8;";
-                                }
-                                if ($headerWebmasterSection->name == "sitePages") {
-                                    $LiIcon = "&#xe3e8;";
-                                }
-                                if ($headerWebmasterSection->name == "articles") {
-                                    $LiIcon = "&#xe02f;";
-                                }
-                                if ($headerWebmasterSection->name == "services") {
-                                    $LiIcon = "&#xe540;";
-                                }
-                                if ($headerWebmasterSection->name == "news") {
-                                    $LiIcon = "&#xe307;";
-                                }
-                                if ($headerWebmasterSection->name == "products") {
-                                    $LiIcon = "&#xe8f6;";
-                                }
+                   
+                    <div class="col-xs-6">
+                        <div class="box p-a" style="cursor: pointer">
+                                <div class="pull-left m-r">
+                                <i class="glyphicon glyphicon-calendar   text-2x text-{{$clr_ary[$ik]}} m-y-sm"></i>
+                            </div>
+                            <div class="clear">
+                                <div class="text-muted">Today</div>
+                                <h4 class="m-a-0 text-md _600">{{ date('Y-m-d') }}</h4>
+                              </div>
+                        </div>
+                        
+                    </div>
+                    <div class="col-xs-6">
+                        <div class="box p-a" style="cursor: pointer">
+                                <div class="pull-left m-r">
+                                <i class="glyphicon glyphicon-time   text-2x text-{{$clr_ary[$ik]}} m-y-sm"></i>
+                            </div>
+                            <div class="clear">
+                                <div class="text-muted">Time</div>
+                                <h4 class="m-a-0 text-md _600" id="time"></h4>
+                            </div>
+                        </div>
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+                    <script type="text/javascript">
+                        function checkTime(i) {
+                            if (i < 10) {
+                                i = "0" + i;
+                            }
+                            return i;
+                            }
 
-                                ?>
-                                <div class="col-xs-6">
-                                    <div class="box p-a" style="cursor: pointer"
-                                         onclick="location.href='{{ route('topics',$headerWebmasterSection->id) }}'">
-                                        <a href="{{ route('topics',$headerWebmasterSection->id) }}">
-                                            <div class="pull-left m-r">
-                                                <i class="material-icons  text-2x text-{{$clr_ary[$ik]}} m-y-sm">{!! $LiIcon !!}</i>
-                                            </div>
-                                            <div class="clear">
-                                                <div class="text-muted">{{ trans('backLang.'.$headerWebmasterSection->name) }}</div>
-                                                <h4 class="m-a-0 text-md _600">{{ $headerWebmasterSection->topics->count() }}</h4>
-                                            </div>
-                                        </a>
-                                    </div>
-                                </div>
-                                <?php
-                                $ik++
-                                ?>
-                            @endif
-                        @endif
-                    @endforeach
+                            function startTime() {
+                            var today = new Date();
+                            var h = today.getHours();
+                            var m = today.getMinutes();
+                            var s = today.getSeconds();
+                            // add a zero in front of numbers<10
+                            m = checkTime(m);
+                            s = checkTime(s);
+                            document.getElementById('time').innerHTML = h + ":" + m + ":" + s;
+                            t = setTimeout(function() {
+                                startTime()
+                            }, 500);
+                            }
+                            startTime();
+                    </script>
+                     </div>
+                   
+                    <div class="col-xs-12">
+                        <div class="box p-a" style="cursor: pointer">
+                            <a href="{{ route("calendar") }}">
+                            <div class="pull-left m-r">
+                                <i class="glyphicon glyphicon-pencil  text-2x text-{{$clr_ary[$ik]}} m-y-sm"></i>
+                            </div>
+                            <div class="clear">
+                                <div class="text-muted">Your Schedule</div>
+                                <h6 class="m-a-0 text-md _600">New Event and Note</h6>
+                            </div>
+                            </a>
+                        </div>
+                        
+                    </div>
+                    @if(@Auth::user()->permissionsGroup->webmaster_status)
                     <div class="col-xs-12">
                         <div class="row-col box-color text-center primary">
                             <div class="row-cell p-a">
-                                {{ trans('backLang.visitors') }}
+                            <a href="{{ route("users") }}">
+                                 Doctors 
+                                <h4 class="m-a-0 text-md _600"> {{$TotalUsers}}</h4>
+                            </a>    
+                            </div>
+                            <div class="row-cell p-a dker">
+                            <a href="{{ route("leads") }}">
+                                Leads
+                                <h4 class="m-a-0 text-md _600">{{$TotalLeads}}</h4>
+                            </a>
+                            </div>
+                        </a>
+                        </div>
+                    </div>
+                    @else
+                    <div class="col-xs-12">
+                        <div class="row-col box-color text-center primary">
+                            <div class="row-cell p-a">
+                                 Visitors 
                                 <h4 class="m-a-0 text-md _600"><a href>{{$TodayVisitors}}</a></h4>
                             </div>
                             <div class="row-cell p-a dker">
-                                {{ trans('backLang.pageViews') }}
-                                <h4 class="m-a-0 text-md _600"><a href>{{$TodayPages}}</a></h4>
+                            <a href="{{ route("leads") }}">
+                                Leads
+                                <h4 class="m-a-0 text-md _600">{{$TotalLeads}}</h4>
+                            </a>
                             </div>
                         </div>
                     </div>
+                    @endif
                 </div>
             </div>
             <div class="col-sm-12 col-md-7 col-lg-8">
                 <div class="row-col box bg">
                     <div class="col-sm-8">
                         <div class="box-header">
-                            <h3>{{ trans('backLang.visitors') }}</h3>
+                            <h3>Visitors</h3>
                             <small>{{ trans('backLang.lastFor7Days') }}</small>
                         </div>
                         <div class="box-body">
@@ -387,117 +418,35 @@
 
         </div>
         <div class="row">
-            <?php
-            $col_count = 0;
-            if (Helper::GeneralWebmasterSettings("inbox_status")) {
-                if (Auth::user()->permissionsGroup->inbox_status) {
-                    $col_count++;
+            <?php  
+            if(Auth::user()->permissionsGroup->webmaster_status){          
+                $col_count = 0;
+                if (Helper::GeneralWebmasterSettings("inbox_status")) {
+                    if (Auth::user()->permissionsGroup->inbox_status) {
+                        $col_count++;
+                    }
                 }
-            }
-            if (Helper::GeneralWebmasterSettings("calendar_status")) {
-                if (Auth::user()->permissionsGroup->calendar_status) {
-                    $col_count++;
+                if (Helper::GeneralWebmasterSettings("calendar_status")) {
+                    if (Auth::user()->permissionsGroup->calendar_status) {
+                        $col_count++;
+                    }
                 }
-            }
-            if (Helper::GeneralWebmasterSettings("newsletter_status")) {
-                if (Auth::user()->permissionsGroup->newsletter_status) {
-                    $col_count++;
+                if (Helper::GeneralWebmasterSettings("newsletter_status")) {
+                    if (Auth::user()->permissionsGroup->newsletter_status) {
+                        $col_count++;
+                    }
                 }
-            }
-            $col_width = 12;
-            if ($col_count > 0) {
-                $col_width = 12 / $col_count;
+                $col_width = 12;
+                if ($col_count > 0) {
+                    $col_width = 12 / $col_count;
+                }
+            }else{
+               $col_width = 6 ; 
+                 
             }
             ?>
-
-            @if(Helper::GeneralWebmasterSettings("inbox_status"))
-                @if(@Auth::user()->permissionsGroup->inbox_status)
-                    <div class="col-md-12 col-xl-{{$col_width}}">
-                        <div class="box m-b-0" style="min-height: 370px">
-                            <div class="box-header">
-                                <h3>{{ trans('backLang.latestMessages') }}</h3>
-                            </div>
-                            <div class="box-tool">
-                                <ul class="nav">
-                                    <li class="nav-item inline dropdown">
-                                        <a class="nav-link text-muted p-x-xs" data-toggle="dropdown">
-                                            <i class="fa fa-ellipsis-v"></i>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-scale pull-right">
-                                            <a class="dropdown-item"
-                                               href="{{ route("webmails") }}"> {!! trans('backLang.inbox') !!} </a>
-                                            <a class="dropdown-item"
-                                               href="{{ route("webmails",["group_id"=>"sent"]) }}">{!! trans('backLang.sent') !!}</a>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                            @if(count($Webmails) == 0)
-                                <div class="text-center m-t-1" style="color:#bbb">
-                                    <h1><i class="material-icons">&#xe156;</i></h1>
-                                    {{ trans('backLang.noData') }}</div>
-                            @else
-                                <ul class="list-group no-border">
-                                    @foreach($Webmails as $Webmail)
-                                        <?php
-                                        $s4ds_current_date = date('Y-m-d', $_SERVER['REQUEST_TIME']);
-                                        $day_mm = date('Y-m-d', strtotime($Webmail->date));
-                                        if ($day_mm == $s4ds_current_date) {
-                                            $dtformated = date('h:i A', strtotime($Webmail->date));
-                                        } else {
-                                            $dtformated = date('d M Y', strtotime($Webmail->date));
-                                        }
-
-                                        try {
-                                            $groupColor = $Webmail->webmailsGroup->color;
-                                            $groupName = $Webmail->webmailsGroup->name;
-                                        } catch (Exception $e) {
-                                            $groupColor = "";
-                                            $groupName = "";
-                                        }
-
-                                        $fontStyle = "";
-                                        $unreadIcon = "&#xe151;";
-                                        $unreadbg = "";
-                                        $unreadText = "";
-                                        if ($Webmail->status == 0) {
-                                            $fontStyle = "_700";
-                                            $unreadIcon = "&#xe0be;";
-                                            $unreadbg = "style=\"background: $groupColor \"";
-                                            $unreadText = "style=\"color: $groupColor \"";
-                                        }
-                                        ?>
-                                        <li class="list-group-item">
-                                            <div class="pull-right">
-                                                <small>{{ $dtformated }}</small>
-                                            </div>
-                                            <a href="{{ route("webmailsEdit",["id"=>$Webmail->id]) }}"
-                                               class="pull-left w-40 m-r">
-                                    <span class="w-40 rounded danger" style="background: {!! $groupColor !!}">
-		                  <i class="material-icons">{!! $unreadIcon !!}</i>
-		                </span>
-                                            </a>
-                                            <div class="clear">
-                                                <a href="{{ route("webmailsEdit",["id"=>$Webmail->id]) }}"
-                                                   class="_500 block">{{ $Webmail->from_name }}</a>
-                                                <span class="text-muted">{{ $Webmail->title }}</span>
-                                            </div>
-                                        </li>
-                                    @endforeach
-
-                                </ul>
-
-                                <div class="box-footer">
-                                    <a href="{{ route("webmails",["group_id"=>"create"]) }}"
-                                       class="btn btn-sm btn-outline b-primary rounded text-u-c pull-right">{{ trans('backLang.compose') }}</a>
-                                    <a href="{{ route("webmails") }}"
-                                       class="btn btn-sm white text-u-c rounded">{{ trans('backLang.more') }}</a>
-                                </div>
-                            @endif
-                        </div>
-                    </div>
-                @endif
-            @endif
+     
+            
             @if(Helper::GeneralWebmasterSettings("calendar_status"))
                 @if(@Auth::user()->permissionsGroup->calendar_status)
                     <div class="col-md-12 col-xl-{{$col_width}}">
@@ -554,47 +503,98 @@
                     </div>
                 @endif
             @endif
-            @if(Helper::GeneralWebmasterSettings("newsletter_status"))
-                @if(@Auth::user()->permissionsGroup->newsletter_status)
-                    <div class="col-md-12 col-xl-{{$col_width}}">
+ 
+                      <div class="col-md-12 col-xl-{{$col_width}}">
                         <div class="box m-b-0" style="min-height: 370px">
                             <div class="box-header">
-                                <h3>{{ trans('backLang.latestContacts') }}</h3>
+                                <h3>New Leads</h3>
                             </div>
                             <div class="box-tool">
                                 <ul class="nav">
+                                  
                                     <li class="nav-item inline">
-                                        <a href="{{ route("contacts") }}"
-                                           class="btn btn-sm white text-u-c rounded">{{ trans('backLang.addNew') }}</a>
+                                        <a href="{{ route("leads") }}"
+                                           class="btn btn-sm white text-u-c rounded">View Leads</a>
                                     </li>
                                 </ul>
                             </div>
-                            @if(count($Contacts) == 0)
+                            @if(count($Leads) == 0)
                                 <div class="text-center m-t-1" style="color:#bbb">
                                     <h1><i class="material-icons">&#xe7ef;</i></h1>
                                     {{ trans('backLang.noData') }}</div>
                             @else
                                 <ul class="list no-border p-b">
-                                    @foreach($Contacts as $Contact)
+                                    @foreach($Leads as $Lead)
                                         <li class="list-item">
-                                            <a href="{{ route("contactsEdit",["id"=>$Contact->id]) }}"
+                                            <a href="{{ route("leads") }}"
                                                class="list-left">
 	                	<span class="w-40 avatar">
-                            @if($Contact->photo!="")
-                                <img src="{{ URL::to('uploads/contacts/'.$Contact->photo) }}"
-                                     alt="{{ $Contact->first_name }} {{ $Contact->last_name }}">
+                            
+                                <img src="{{ URL::to('uploads/contacts/profile.jpg') }}"
+                                alt="{{ $Lead->name }} {{ $Lead->email }}" style="opacity: 0.5">
+ 	                    </span>
+                                            </a>
+                                            <div class="list-body">
+                                                <div>
+                                                    <a href="{{ route("leads") }}">{{ $Lead->name }} : {{ $Lead->email }}</a>
+                                                </div>
+                                                <small class="text-muted text-ellipsis"><span
+                                                            dir="ltr"> {{ $Lead->phone }}</span></small>
+                                            </div>
+                                        </li>
+                                    @endforeach
+
+                                </ul>
+                            @endif
+                        </div>
+                    </div>
+         
+
+            @if(Helper::GeneralWebmasterSettings("newsletter_status"))
+                @if(@Auth::user()->permissionsGroup->newsletter_status)
+                    <div class="col-md-12 col-xl-{{$col_width}}">
+                        <div class="box m-b-0" style="min-height: 370px">
+                            <div class="box-header">
+                                <h3>New Doctors</h3>
+                            </div>
+                            <div class="box-tool">
+                                <ul class="nav">
+                                    <li class="nav-item inline">
+                                        <a href="{{ route("usersCreate") }}"
+                                           class="btn btn-sm white text-u-c rounded">{{ trans('backLang.addNew') }}</a>
+                                    </li>
+                                    <li class="nav-item inline">
+                                        <a href="{{ route("users") }}"
+                                           class="btn btn-sm white text-u-c rounded">View Doctors</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            @if(count($Users) == 0)
+                                <div class="text-center m-t-1" style="color:#bbb">
+                                    <h1><i class="material-icons">&#xe7ef;</i></h1>
+                                    {{ trans('backLang.noData') }}</div>
+                            @else
+                                <ul class="list no-border p-b">
+                                    @foreach($Users as $User)
+                                        <li class="list-item">
+                                            <a href="{{ route("usersEdit",["id"=>$User->id]) }}"
+                                               class="list-left">
+	                	<span class="w-40 avatar">
+                            @if($User->photo!="")
+                                <img src="{{ URL::to('uploads/users/'.$User->photo) }}"
+                                     alt="{{ $User->name }} {{ $User->email }}">
                             @else
                                 <img src="{{ URL::to('uploads/contacts/profile.jpg') }}"
-                                     alt="{{ $Contact->first_name }} {{ $Contact->last_name }}" style="opacity: 0.5">
+                                alt="{{ $User->name }} {{ $User->email }}"> style="opacity: 0.5">
                             @endif
 	                    </span>
                                             </a>
                                             <div class="list-body">
                                                 <div>
-                                                    <a href="{{ route("contactsEdit",["id"=>$Contact->id]) }}">{{ $Contact->first_name }} {{ $Contact->last_name }}</a>
+                                                    <a href="{{ route("usersEdit",["id"=>$User->id]) }}">{{ $User->name }}</a>
                                                 </div>
                                                 <small class="text-muted text-ellipsis"><span
-                                                            dir="ltr">{{ $Contact->phone }}</span></small>
+                                                            dir="ltr"> {{ $User->email }}</span></small>
                                             </div>
                                         </li>
                                     @endforeach

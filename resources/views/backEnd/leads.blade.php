@@ -15,33 +15,59 @@
             </div>
 
             @if($Leads->total() >0)
-                @if(@Auth::user()->permissionsGroup->webmaster_status)
-                    <div class="row p-a pull-right" style="margin-top: -70px;">
-                        <div class="col-sm-12">
-                            <a class="btn btn-fw primary" href="{{route("leadsCreate")}}">
-                                <i class="fa fa-plus" style="font-size:70%"></i> <i class="fa fa-users"></i>
-                                &nbsp; New Lead
+                
+                <div class="navbar"> 
+                <a data-toggle="modal" data-target="#aside" class="navbar-item pull-left hidden-lg-up">
+                    <i class="material-icons">&#xe5d2;</i>
+                </a> 
+                <div class="navbar-item pull-left h5" ng-bind="$state.current.data.title" id="pageTitle"></div>
+
+                    <div class="row p-a pull-right " style="margin-top: -70px">
+                        <div class="col-sm-4">
+                            <a class="btn btn-sm primary" href="{{route("leadsXls")}}">
+                                <i class="fa fa-cloud-download" ></i>  
+                                &nbsp; Report XLS
+                            </a>
+                            <!-- test nav bar -->
+                        </div>
+                        <div class="col-sm-4">
+                            <a class="btn btn-sm primary" href="{{route("leadsExcel")}}">
+                                <i class="fa fa-cloud-download" ></i>  
+                                &nbsp; Report xlsx
+                            </a>
+                        </div>
+                        <div class="col-sm-4">
+                            <a class="btn btn-sm primary" href="{{route("leadsCSV")}}">
+                                <i class="fa fa-cloud-download" style=""></i>  
+                                &nbsp; Report CSV
                             </a>
                         </div>
                     </div>
-                @endif
+                </div>  
+                    <!-- <div class="row p-a pull-right" style="margin-top: -70px;margin-right:9%">
+                       
+                    </div>
+                    <div class="row p-a pull-right" style="margin-top: -70px">
+                        <div class="col-sm-6">
+                            <a class="btn btn-sm primary" href="{{route("leadsCSV")}}">
+                                <i class="fa fa-cloud-download" style=""></i>  
+                                &nbsp; Report CSV
+                            </a>
+                        </div>
+                    </div> -->
+                
             @endif
             @if($Leads->total() == 0)
                 <div class="row p-a">
                     <div class="col-sm-12">
                         <div class=" p-a text-center ">
                             {{ trans('backLang.noData') }}
-                            <br>
-                            @if(@Auth::user()->permissionsGroup->webmaster_status)
-                                <br>
-                                <a class="btn btn-fw primary" href="{{route("leadsCreate")}}">
-                                    <i class="fa fa-users"></i> 
-                                    &nbsp; New Lead
-                                </a>
-                            @endif
+                           
                         </div>
                     </div>
+                    
                 </div>
+                
             @endif
 
             @if($Leads->total() > 0)

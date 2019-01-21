@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\LeadsController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -116,6 +118,11 @@ Route::Group(['prefix' => env('BACKEND_PATH')], function () {
     Route::post('/leads/updateAll', 'LeadsController@updateAll')->name('leadsUpdateAll');
     Route::get('/leadscategory','LeadsController@catogoryshow')->name('leadsCategory');
     Route::get('/leads','LeadsController@index')->name('leads');
+
+    Route::get('/leads/exportExcel','LeadsController@exportExcel')->name('leadsExcel');
+    Route::get('/leads/exportCSV','LeadsController@exportCSV')->name('leadsCSV');
+    Route::get('/leads/exportXls','LeadsController@exportXls')->name('leadsXls');
+
 
     // Sections
     Route::get('/{webmasterId}/sections', 'SectionsController@index')->name('sections');

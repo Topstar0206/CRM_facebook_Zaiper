@@ -12,6 +12,10 @@ use File;
 use Illuminate\Config;
 use Illuminate\Http\Request;
 use Redirect;
+use Maatwebsite\Excel\Facades\Excel;
+// use Excel;
+use DB;
+// use App\Exports\LeadExport;
 
 class LeadsController extends Controller
 {
@@ -54,6 +58,62 @@ class LeadsController extends Controller
         return view("backEnd.leads", compact("Leads", "Permissions", "GeneralWebmasterSections"));
     }
 
+    public function exportCSV(){
+        if (@Auth::user()->permissionsGroup->view_status) {
+            $data =  Lead::where('user_id', '=', Auth::user()->id)->groupby('name')->get()->toArray();
+             } else {
+            $data =  Lead::groupby('name')->get()->toArray();
+                
+        }
+
+        // $data = Item::get()->toArray();
+            
+        return Excel::create('Leads Report', function($excel) use ($data) {
+            $excel->sheet('mySheet', function($sheet) use ($data)
+            {
+                $sheet->fromArray($data);
+            });
+        })->download('csv');
+        // return Excel::download(new LeadExport, 'leads.csv');
+    }
+
+    public function exportExcel(){
+        if (@Auth::user()->permissionsGroup->view_status) {
+            $data =  Lead::where('user_id', '=', Auth::user()->id)->get()->toArray();
+             } else {
+            $data =  Lead::get()->toArray();
+                
+        }
+
+        // $data = Item::get()->toArray();
+            
+        return Excel::create('Leads Report', function($excel) use ($data) {
+            $excel->sheet('mySheet', function($sheet) use ($data)
+            {
+                $sheet->fromArray($data);
+            });
+        })->download('xlsx');
+    }
+
+    public function exportXls(){
+        if (@Auth::user()->permissionsGroup->view_status) {
+            $data =  Lead::select('name','email','phone','c_date')->where('user_id', '=', Auth::user()->id)->orderby('id', 'desc')->groupby('name')->get()->toArray();
+             } else {
+            $data =  Lead::select('name','email','phone','c_date')->orderby('id', 'desc')->groupby('name')->get()->toArray();
+                
+        }
+
+        // $data = Item::get()->toArray();
+            
+        return Excel::create('Leads Report', function($excel) use ($data) {
+            $excel->sheet('mySheet', function($sheet) use ($data)
+            {
+                $sheet->fromArray($data);
+            });
+        })->download('xls');
+    }
+    
+
     /**
      * Show the form for creating a new resource.
      *
@@ -69,6 +129,7 @@ class LeadsController extends Controller
 
         return view("backEnd.leads.create", compact("GeneralWebmasterSections", "Users"));
     }
+
 
     /**
      * Store a newly created resource in storage.
